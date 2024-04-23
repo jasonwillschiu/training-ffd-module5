@@ -26,26 +26,49 @@ function buildTask(data) {
         display: data.placer_organization_name 
       }  
     },
+    // status { status }
+    status : 'requested',
 
-    // TODO: status { status }
-
-    // TODO: intent { 'order' }
-
-    // TODO: priority { priority }
-
-    // TODO: code { code: 'fulfill', display: 'Fulfill the focal request', system: 'http://hl7.org/fhir/CodeSystem/task-code' }
-
-    // TODO: description { description }
-
-    // TODO: focus { servicerequest_id }
-
-    // TODO: for { patient_id }
-
+    // intent { 'order' }
+    intent: 'order',
+    // priority { priority }
+    priority: 'routine',
+    // code { code: 'fulfill', display: 'Fulfill the focal request', system: 'http://hl7.org/fhir/CodeSystem/task-code' }
+    code: [
+      {
+        coding: [
+          {
+            code: 'fulfill',
+            display: 'Fulfill the focal request',
+            system: 'http://hl7.org/fhir/CodeSystem/task-code'
+          }
+        ]
+      }
+    ],
+    // description { description }
+    description: 'creating a task!',
+    // focus { servicerequest_id }
+    focus:{
+      "reference" : "ServiceRequest/1240",
+      "type" : "ServiceRequest"
+    },
+    // for { patient_id }
+    for: {
+      'reference': 'Patient/T1000',
+      'type': 'Patient'
+    },
     // TODO: authoredOn { authoredOn }
-
+    authoredOn: new Date(),
     // TODO: requester { placer_practitionerrole_id }
-
+    requester: {
+      "reference" : `PractitionerRole/${data.placer_practitionerrole_id}`,
+      "type" : "PractitionerRole"
+    },
     // TODO: owner { filler_organization_id }
+    owner: {
+      'reference': `Organization/${data.filler_organization_id}`,
+      'type': 'Organization'
+    },
   }
 
   // conditionally populate when performerType provided
