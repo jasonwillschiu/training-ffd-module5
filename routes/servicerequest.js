@@ -29,11 +29,10 @@ function buildServiceRequest(data) {
         display: data.placer_organization_name 
       }
     },
-
-    // TODO: status { status }
-
-    // TODO: intent { 'order' }
-
+    // status
+    status: 'active',
+    // intent
+    intent: 'order',
     // category
     category: [
       {
@@ -47,17 +46,45 @@ function buildServiceRequest(data) {
       }
     ],
 
-    // TODO: priority { priority }
+    // priority { priority }
+    priority: 'routine',
+    // code { request_code_code, request_code_display, 'http://snomed.info/sct' }
+    code: [
+      {
+        coding: [
+          {
+            code: data.request_code_code,
+            display: data.request_code_display,
+            system: "http://snomed.info/sct"
+          }
+        ]
+      }
+    ],
+    // subject { patient_id }
+    subject: {
+      "reference" : "Patient/T1000",
+      "type" : "Patient"
+    },
 
-    // TODO: code { request_code_code, request_code_display, 'http://snomed.info/sct' }
-
-    // TODO: subject { patient_id }
-
-    // TODO: authoredOn { authoredOn }
-    
-    // TODO: requester { placer_practitionerrole_id }
-
-    // TODO: performerType { performerType_code, performerType_display, 'http://snomed.info/sct' }
+    // authoredOn { authoredOn }
+    authoredOn: new Date(),
+    // requester { placer_practitionerrole_id }
+    requester: {
+      "reference" : `PractitionerRole/${data.placer_practitionerrole_id}`,
+      "type" : "PractitionerRole"
+    },
+    // performerType { performerType_code, performerType_display, 'http://snomed.info/sct' }
+    performerType: [
+      {
+        coding: [
+          {
+            code: data.performerType_code,
+            display: data.performerType_display,
+            system: "http://snomed.info/sct"
+          }
+        ]
+      }
+    ]
   };
   
   // conditionally populate when reasonCode provided
@@ -68,6 +95,8 @@ function buildServiceRequest(data) {
       {        
         coding: [
           {
+            code: data.reasonCode_code,
+            display: data.reasonCode_display,
             system:  "http://snomed.info/sct"
           }
         ]  
